@@ -44,7 +44,7 @@ forecast_evaluation <- function(eval_data){
     print(fs_horizon)
     # Get the actual data
     actual_data <- as.numeric(eval_data[(1+(nrow(eval_data)-
-                                              fs_horizon)):nrow(eval_data), "label"])
+                                fs_horizon)):nrow(eval_data), "label"])
     # 0 values have to be change because the MAPE cannot handle 0s
     actual_data[which(actual_data == 0)] <- 0.0001
     # Generate all forecasts for the seven defined methods
@@ -62,9 +62,9 @@ forecast_evaluation <- function(eval_data){
     best_mape <- 1000000000
     # Find the best svm forecast for the three possible methods
     for(method in c('svmPoly', 'svmLinear')){
-      tmp_svm <- forecast_svm(fs_data = eval_data, svm_method = method, horizon = fs_horizon
-                              , data_label = "label", data_features = 
-                                colnames(eval_data)[which(colnames(eval_data) != "label")])
+      tmp_svm <- forecast_svm(fs_data = eval_data, svm_method = method,
+                              horizon = fs_horizon, data_label = "label",
+    data_features = colnames(eval_data)[which(colnames(eval_data) != "label")])
       # 0 values have to be change because the MAPE cannot handle 0s
       tmp_svm = as.numeric(tmp_svm)
       tmp_svm[which(tmp_svm == 0)] <- 0.0001
@@ -83,9 +83,9 @@ forecast_evaluation <- function(eval_data){
     best_mape <- 1000000000
     # Find the best xgboost forecast for the three possible methods
     for(method in c('xgbTree', 'xgbLinear')){
-      tmp_xgb <- forecast_xgboost(fs_data = eval_data, xgb_method = method, horizon = fs_horizon
-                                  , data_label = "label", data_features = 
-                                    colnames(eval_data)[which(colnames(eval_data) != "label")])
+      tmp_xgb <- forecast_xgboost(fs_data = eval_data, xgb_method = method, 
+                    horizon = fs_horizon, data_label = "label", data_features = 
+                    colnames(eval_data)[which(colnames(eval_data) != "label")])
       
       # 0 values have to be change because the MAPE cannot handle 0s
       tmp_xgb = as.numeric(tmp_xgb)
@@ -105,14 +105,14 @@ forecast_evaluation <- function(eval_data){
     # Get the ann forecast
     eval_ann <- forecast_ann(fs_data = eval_data, horizon = fs_horizon
                              , data_label = "label", data_features = 
-                               colnames(eval_data)[which(colnames(eval_data) != "label")])
+                    colnames(eval_data)[which(colnames(eval_data) != "label")])
     
     best_mape <- 1000000000
     # Find the best cart forecast for the three possible methods
     for(method in c('rpart')){
-      tmp_cart <- forecast_cart(fs_data = eval_data, cart_method = method, horizon = fs_horizon
-                                , data_label = "label", data_features = 
-                                  colnames(eval_data)[which(colnames(eval_data) != "label")])
+      tmp_cart <- forecast_cart(fs_data = eval_data, cart_method = method, 
+                    horizon = fs_horizon, data_label = "label", data_features = 
+                    colnames(eval_data)[which(colnames(eval_data) != "label")])
       # 0 values have to be change because the MAPE cannot handle 0s
       tmp_cart = as.numeric(tmp_cart)
       tmp_cart[which(tmp_cart == 0)] <- 0.0001
@@ -139,10 +139,10 @@ forecast_evaluation <- function(eval_data){
   for(elem in list(eval_rw, eval_arima, eval_es, eval_svm,
                    eval_xgb, eval_ann, eval_cart)){
     calc_mape <- forecTheta::errorMetric(obs = actual_data,
-                                         forec = as.numeric(elem), type="APE", statistic="M")
+                        forec = as.numeric(elem), type="APE", statistic="M")
     mape_vector <- append(mape_vector, calc_mape)
     calc_mdape <- forecTheta::errorMetric(obs = actual_data,
-                                          forec = as.numeric(elem), type="APE", statistic="Md")
+                        forec = as.numeric(elem), type="APE", statistic="Md")
     mdape_vector <- append(mdape_vector, calc_mdape)
   }
   # Assigning the method names to the above generated values
@@ -239,11 +239,12 @@ forecast_data_preparation <- function(eval_data, na_option = "mean"){
     
     # One-Hot-Encode unordered factor columns of a data.table
     encoded_data = mltools::one_hot(data.table::as.data.table(prep_eval_data)
-                                    , cols = "auto", dropCols = TRUE, dropUnusedLevels = TRUE)
+                    , cols = "auto", dropCols = TRUE, dropUnusedLevels = TRUE)
     
     
     # Combine preprocessed data with forecast_label
-    eval_data <- cbind(as.data.frame(encoded_data), data.frame(label = eval_data[, forecast_label]))
+    eval_data <- cbind(as.data.frame(encoded_data), 
+                       data.frame(label = eval_data[, forecast_label]))
     
   } else {
     stop("A time series or data frame object is required as input!")

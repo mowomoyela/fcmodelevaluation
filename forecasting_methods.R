@@ -131,8 +131,7 @@ forecast_svm <- function(fs_data ,horizon = round(nrow(as.data.frame(fs_data)) *
       train_df <- data.frame(label = as.numeric(train_data),
                              feature = as.numeric(1:length(train_data)))
       test_df <- data.frame(label = as.numeric(test_data),
-                            feature <- as.numeric((length(train_data)+1):(length(train_data)
-                                                                          +length(test_data))))
+      feature <- as.numeric((length(train_data)+1):(length(train_data)+length(test_data))))
     } else if (is.data.frame(fs_data)) {
       # If else clause to check the input data_features and data_label
       if (length(data_features) > 0 & length(data_label) == 1) {
@@ -225,14 +224,17 @@ forecast_cart <- function(fs_data ,horizon = round(nrow(as.data.frame(fs_data)) 
       train_df <- data.frame(label = as.numeric(train_data),
                              feature = as.numeric(1:length(train_data)))
       test_df <- data.frame(label = as.numeric(test_data),
-                            feature <- as.numeric((length(train_data)+1):(length(train_data)+length(test_data))))
+       feature <- as.numeric((length(train_data)+1):(length(train_data)
+                                                     +length(test_data))))
       
     } else if (is.data.frame(fs_data)) {
       # If else clause to check the input data_features and data_label
       if (length(data_features) > 0 & length(data_label) == 1) {
         # Split data into training and testing data based on horizon
-        train_data <- fs_data[1:(nrow(fs_data)-horizon), c(data_label, data_features)]
-        test_data <- fs_data[(1+(nrow(fs_data)-horizon)):nrow(fs_data), c(data_label, data_features)]
+        train_data <- fs_data[1:(nrow(fs_data)-horizon), c(data_label,
+                                                           data_features)]
+        test_data <- fs_data[(1+(nrow(fs_data)-horizon)):nrow(fs_data),
+                             c(data_label, data_features)]
         # Create training and testing dataframes
         train_df <- data.frame(label = train_data[, c(data_label)],
                                feature = train_data[, c(data_features)])
@@ -306,14 +308,17 @@ forecast_ann <- function(fs_data ,horizon = round(nrow(as.data.frame(fs_data)) *
     train_df <- data.frame(label = as.numeric(train_data),
                            feature = as.numeric(1:length(train_data)))
     test_df <- data.frame(label = as.numeric(test_data),
-                          feature <- as.numeric((length(train_data)+1):(length(train_data)+length(test_data))))
+      feature <- as.numeric((length(train_data)+1):(length(train_data)+
+                                                      length(test_data))))
     
   } else if (is.data.frame(fs_data)) {
     # If else clause to check the input data_features and data_label
     if (length(data_features) > 0 & length(data_label) == 1) {
       # Split data into training and testing data based on horizon
-      train_data <- fs_data[1:(nrow(fs_data)-horizon), c(data_label, data_features)]
-      test_data <- fs_data[(1+(nrow(fs_data)-horizon)):nrow(fs_data), c(data_label, data_features)]
+      train_data <- fs_data[1:(nrow(fs_data)-horizon), c(data_label,
+                                                         data_features)]
+      test_data <- fs_data[(1+(nrow(fs_data)-horizon)):nrow(fs_data),
+                           c(data_label, data_features)]
       # Create training and testing dataframes
       train_df <- data.frame(label = train_data[, c(data_label)],
                              feature = train_data[, c(data_features)])
@@ -375,7 +380,8 @@ forecast_ann <- function(fs_data ,horizon = round(nrow(as.data.frame(fs_data)) *
 #' forecast_xgboost(fs_data = datasets::BJsales)
 #' forecast_xgboost(fs_data = datasets::AirPassengers, 
 #' data_features = c("Feb","Mar","Apr"), data_label = "Jan")
-forecast_xgboost <- function(fs_data ,horizon = round(nrow(as.data.frame(fs_data)) * 0.10)
+forecast_xgboost <- function(fs_data ,horizon = 
+                               round(nrow(as.data.frame(fs_data)) * 0.10)
                              , n_round = 10, cv_nfold = 10, data_features = c(),
                              data_label = c(), xgb_method = "xgbTree"){
   
@@ -391,15 +397,17 @@ forecast_xgboost <- function(fs_data ,horizon = round(nrow(as.data.frame(fs_data
       train_df <- data.frame(label = as.numeric(train_data),
                              feature = as.numeric(1:length(train_data)))
       test_df <- data.frame(label = as.numeric(test_data),
-                            feature <- as.numeric((length(train_data)+1):(length(train_data)
-                                                                          +length(test_data))))
+              feature <- as.numeric((length(train_data)+1):(length(train_data)
+                                                          +length(test_data))))
       
     } else if (is.data.frame(fs_data)) {
       # If else clause to check the input data_features and data_label
       if (length(data_features) > 0 & length(data_label) == 1) {
         # Split data into training and testing data based on horizon
-        train_data <- fs_data[1:(nrow(fs_data)-horizon), c(data_label, data_features)]
-        test_data <- fs_data[(1+(nrow(fs_data)-horizon)):nrow(fs_data), c(data_label, data_features)]
+        train_data <- fs_data[1:(nrow(fs_data)-horizon),
+                              c(data_label, data_features)]
+        test_data <- fs_data[(1+(nrow(fs_data)-horizon)):nrow(fs_data),
+                             c(data_label, data_features)]
         # Create training and testing dataframes
         train_df <- data.frame(label = train_data[, c(data_label)],
                                feature = train_data[, c(data_features)])
